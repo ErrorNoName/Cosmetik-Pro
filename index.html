@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Essential CosmetiK Pro — débloque tous les cosmétiques Essential et synchronise les outfits entre joueurs via un relais dédié." />
+  <meta name="theme-color" content="#181818" />
+  <title>Essential CosmetiK Pro</title>
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+  <style>
+    @font-face {
+      font-family: "Minecraft";
+      src: url("assets/fonts/minecraft.woff2") format("woff2");
+      font-display: swap;
+    }
+
+    :root {
+      --bg: #181818;
+      --panel: #1c1c1c;
+      --panel-2: #141414;
+      --line: #3a3a3a;
+      --text: #f0f0f0;
+      --muted: #8a8a8a;
+      --accent: #1d6aff;
+      --accent-hover: #3d82ff;
+      --accent-dark: #1247b3;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    .mc { font-family: "Minecraft", monospace; letter-spacing: 0.03em; }
+    .mc-sm { font-family: "Minecraft", monospace; font-size: 12px; letter-spacing: 0.02em; }
+
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(29, 106, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(29, 106, 255, 0.035) 1px, transparent 1px);
+      background-size: 32px 32px;
+      mask-image: radial-gradient(ellipse at 50% 20%, black 10%, transparent 75%);
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 0 20px 48px;
+    }
+
+    /* —— Hero —— */
+    .hero {
+      text-align: center;
+      padding: 64px 0 40px;
+      animation: fadeUp 0.7s var(--ease);
+    }
+
+    .hero-logo {
+      width: 88px;
+      height: 88px;
+      margin: 0 auto 24px;
+      filter: drop-shadow(0 0 28px rgba(29, 106, 255, 0.45));
+      image-rendering: pixelated;
+    }
+
+    .hero h1 {
+      font-size: clamp(22px, 5vw, 32px);
+      color: var(--accent);
+      margin-bottom: 14px;
+      text-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-lead {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0 auto 28px;
+      line-height: 1.6;
+    }
+
+    .hero-lead strong { color: var(--text); }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 0 22px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: filter 0.15s, transform 0.12s;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -2px 0 rgba(0,0,0,0.35);
+    }
+
+    .btn:active { transform: translateY(1px); }
+
+    .btn-primary {
+      background: linear-gradient(180deg, #3d84ff, var(--accent) 50%, var(--accent-dark));
+      color: #fff;
+    }
+
+    .btn-primary:hover { filter: brightness(1.1); }
+
+    .btn-secondary {
+      background: linear-gradient(180deg, #4a4a4a, #333 50%, #222);
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    .btn-secondary:hover { filter: brightness(1.12); }
+
+    /* —— Features —— */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-bottom: 32px;
+      animation: fadeUp 0.7s 0.1s var(--ease) both;
+    }
+
+    .feat {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      padding: 20px 18px;
+      text-align: center;
+    }
+
+    .feat h3 {
+      font-size: 13px;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .feat p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    /* —— Panels —— */
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      padding: 24px 22px;
+      margin-bottom: 16px;
+      animation: fadeUp 0.7s 0.18s var(--ease) both;
+    }
+
+    .panel h2 {
+      font-size: 15px;
+      color: var(--text);
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .panel p, .panel li {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .panel p + p { margin-top: 10px; }
+
+    .panel strong { color: var(--text); }
+
+    .panel ul, .panel ol {
+      margin: 12px 0 0 20px;
+    }
+
+    .panel li { margin-bottom: 6px; }
+
+    .panel li::marker { color: var(--accent); }
+
+    .note {
+      margin-top: 14px;
+      padding: 12px 14px;
+      background: var(--panel-2);
+      border-left: 3px solid var(--accent);
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 13px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+    }
+
+    th {
+      background: var(--panel-2);
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    td { color: var(--muted); }
+
+    a { color: var(--accent-hover); }
+    a:hover { color: #6aa0ff; }
+
+    .steps {
+      counter-reset: step;
+      list-style: none;
+      margin: 14px 0 0;
+      padding: 0;
+    }
+
+    .steps li {
+      counter-increment: step;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 12px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .steps li::before {
+      content: counter(step);
+      flex-shrink: 0;
+      width: 26px;
+      height: 26px;
+      display: grid;
+      place-items: center;
+      background: var(--accent);
+      color: #fff;
+      font-family: "Minecraft", monospace;
+      font-size: 11px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 32px 0 16px;
+      color: var(--muted);
+      font-size: 11px;
+      animation: fadeUp 0.7s 0.25s var(--ease) both;
+    }
+
+    footer a { color: var(--muted); }
+    footer a:hover { color: var(--accent); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .hero { padding-top: 40px; }
+      .panel { padding: 18px 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <header class="hero">
+      <img class="hero-logo" src="assets/logo.svg" width="88" height="88" alt="Essential CosmetiK Pro" />
+      <h1 class="mc">Essential CosmetiK Pro</h1>
+      <p class="hero-lead">
+        <strong>Débloque tous les cosmétiques Essential</strong> et synchronise tes outfits entre joueurs —
+        <strong>sans passer par les serveurs Essential</strong>.
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-primary mc-sm" href="https://github.com/ErrorNoName/Cosmetik-Pro/releases/latest">Télécharger</a>
+        <a class="btn btn-secondary mc-sm" href="https://discord.gg/GNT8H3TJfZ">Discord</a>
+        <a class="btn btn-secondary mc-sm" href="https://github.com/ErrorNoName/Cosmetik-Pro">GitHub</a>
+      </div>
+    </header>
+
+    <section class="features" aria-label="Fonctionnalités">
+      <article class="feat">
+        <h3 class="mc-sm">Cosmétiques</h3>
+        <p>Wardrobe Essential complet débloqué côté client — capes, ailes, accessoires…</p>
+      </article>
+      <article class="feat">
+        <h3 class="mc-sm">Sync multijoueur</h3>
+        <p>Les outfits équipés sont partagés entre tous les joueurs qui ont le mod.</p>
+      </article>
+      <article class="feat">
+        <h3 class="mc-sm">Relais dédié</h3>
+        <p>Synchronisation via notre relais — pas l'infrastructure officielle d'Essential.</p>
+      </article>
+    </section>
+
+    <section class="panel" id="about">
+      <h2 class="mc-sm">À quoi sert ce mod ?</h2>
+      <p>
+        <strong>Essential CosmetiK Pro</strong> est un mod client pour <strong>Essential Mod</strong> (Fabric).
+        Il te permet de porter tous les cosmétiques Essential et de voir ceux des autres joueurs moddés.
+      </p>
+      <p>
+        Fonctionne en <strong>LAN</strong>, sur un <strong>serveur classique</strong> ou en <strong>World Share Essential</strong>
+        — aucun plugin serveur requis.
+      </p>
+      <div class="note">
+        Un joueur <strong>sans</strong> le mod ne verra pas tes cosmétiques débloqués — comportement normal d'Essential.
+      </div>
+    </section>
+
+    <section class="panel" id="install">
+      <h2 class="mc-sm">Installateur portable</h2>
+      <p><strong>CosmetiK Installer</strong> installe le mod en un clic sur Windows.</p>
+      <table>
+        <thead>
+          <tr><th>Fonction</th><th>Détail</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Détection auto</td><td>Vanilla, NoRisk, Prism, CurseForge, Modrinth, MultiMC…</td></tr>
+          <tr><td>Recherche</td><td>Filtre tes profils par nom ou version Minecraft</td></tr>
+          <tr><td>Portable</td><td>Aucune installation — lance l'.exe et c'est parti</td></tr>
+        </tbody>
+      </table>
+      <ol class="steps">
+        <li>Télécharge <strong>CosmetikInstaller-portable.exe</strong> depuis les Releases.</li>
+        <li>Lance l'installateur et sélectionne ton profil (ex. Fabric 26.1.2).</li>
+        <li>Clique sur <strong>Installer le mod</strong>.</li>
+        <li>Joue avec <strong>Essential Mod</strong> déjà présent sur le profil.</li>
+      </ol>
+      <p style="margin-top:16px">
+        <a class="btn btn-primary mc-sm" href="https://github.com/ErrorNoName/Cosmetik-Pro/releases/latest">Voir les Releases</a>
+      </p>
+    </section>
+
+    <section class="panel" id="credits">
+      <h2 class="mc-sm">Crédits</h2>
+      <p>
+        Essential CosmetiK Pro s'appuie sur le patch <strong>Prometheus</strong> pour Essential,
+        par <a href="https://github.com/prometheusreengineering" target="_blank" rel="noopener">Prometheus Reengineering</a> :
+      </p>
+      <p>
+        <a href="https://github.com/prometheusreengineering/essential" target="_blank" rel="noopener">prometheusreengineering/essential</a>
+      </p>
+      <p style="margin-top:10px">
+        Ce projet en est une évolution orientée <strong>sync multijoueur via relais dédié</strong>,
+        avec installateur simplifié.
+      </p>
+      <p style="margin-top:14px;font-size:12px">Licence GPL-3.0</p>
+    </section>
+
+    <footer>
+      <p class="mc-sm" style="color:var(--accent);margin-bottom:8px">Essential CosmetiK Pro</p>
+      <p>
+        <a href="https://github.com/ErrorNoName/Cosmetik-Pro">GitHub</a>
+        · <a href="https://github.com/ErrorNoName/Cosmetik-Pro/releases">Releases</a>
+        · <a href="https://discord.gg/GNT8H3TJfZ">Discord</a>
+      </p>
+    </footer>
+  </div>
+</body>
+</html>
