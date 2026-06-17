@@ -7,6 +7,9 @@
 <p><strong>Débloque tous les cosmétiques Essential</strong> et les synchronise entre joueurs — <strong>sans passer par les serveurs Essential</strong>.</p>
 
 <p>
+  <a href="https://errornoname.github.io/Cosmetik-Pro/">
+    <img src="https://img.shields.io/badge/Site-Web-181818?style=for-the-badge&labelColor=1d6aff" alt="Site web" />
+  </a>
   <a href="https://github.com/ErrorNoName/Cosmetik-Pro/releases/latest">
     <img src="https://img.shields.io/badge/Télécharger-Release-1d6aff?style=for-the-badge" alt="Télécharger" />
   </a>
