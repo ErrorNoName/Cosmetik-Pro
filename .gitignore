@@ -1,0 +1,7 @@
+# Build artifacts only — use Releases
+*.exe
+*.jar
+
+# OS
+Thumbs.db
+Desktop.ini
