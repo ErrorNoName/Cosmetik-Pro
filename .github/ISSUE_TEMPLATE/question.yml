@@ -1,0 +1,36 @@
+name: Question
+description: Aide installation ou utilisation
+title: "[Question] "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Pose ta question sur l'installateur ou le mod.
+
+  - type: dropdown
+    id: topic
+    attributes:
+      label: Sujet
+      options:
+        - Installateur Windows
+        - Installation du mod (jar)
+        - Sync multijoueur / relais
+        - Compatibilité versions
+        - Autre
+    validations:
+      required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Ta question
+      placeholder: "Décris ce que tu essaies de faire et où tu es bloqué."
+    validations:
+      required: true
+
+  - type: input
+    id: mc
+    attributes:
+      label: Version Minecraft (si applicable)
+      placeholder: "ex. 26.1.2"

@@ -1,0 +1,70 @@
+name: Bug
+description: Signaler un problème avec le mod ou l'installateur
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Décris le problème le plus précisément possible.
+
+  - type: input
+    id: version
+    attributes:
+      label: Version CosmetiK Pro
+      placeholder: "ex. v1.2.0"
+    validations:
+      required: true
+
+  - type: input
+    id: mc
+    attributes:
+      label: Version Minecraft
+      placeholder: "ex. 26.1.2"
+    validations:
+      required: true
+
+  - type: input
+    id: essential
+    attributes:
+      label: Version Essential Mod
+      placeholder: "ex. 1.3.10.9"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: launcher
+    attributes:
+      label: Launcher
+      options:
+        - Vanilla
+        - NoRisk
+        - Prism Launcher
+        - CurseForge
+        - Modrinth
+        - MultiMC / PolyMC
+        - Autre
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Étapes pour reproduire
+      placeholder: "1. ...\n2. ..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Comportement attendu
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Comportement observé
+    validations:
+      required: true
